@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sri Wahyuni ♡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #FADADD; 
+            --blue: #B4D9EF; 
+            --dark-pink: #f48fb1;
+            --text-color: #4A4A4A;
+            --bg-gradient: linear-gradient(135deg, #FADADD 0%, #B4D9EF 100%);
+            --white-trans: rgba(255, 255, 255, 0.85);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-color); min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
+        .cursive { font-family: 'Dancing Script', cursive; }
+
+        #bg-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-heart { position: absolute; color: rgba(255, 255, 255, 0.6); font-size: 20px; animation: floatUp linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+
+        #audio-btn { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100; font-size: 24px; transition: transform 0.3s ease; }
+        #audio-btn:hover { transform: scale(1.1); }
+
+        #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: rgba(255,255,255,0.4); z-index: 99; display: none; }
+        #progress-bar { height: 100%; background: var(--dark-pink); width: 0%; transition: width 0.5s ease; }
+
+        #nav-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; gap: 15px; z-index: 99; }
+        .nav-btn { background: rgba(255, 255, 255, 0.9); border: 2px solid var(--dark-pink); color: var(--dark-pink); padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .nav-btn:hover { background: var(--dark-pink); color: white; }
+
+        .step-section { display: none; flex: 1; width: 100%; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; position: relative; z-index: 10; padding: 20px; opacity: 0; transition: opacity 0.8s ease; }
+        .step-section.active { display: flex; opacity: 1; }
+        .step-title { text-align: center; margin-bottom: 30px; text-shadow: 1px 1px 3px rgba(255,255,255,0.8); }
+        .step-title h1 { font-size: 2.5rem; color: var(--dark-pink); margin-bottom: 10px; }
+
+        .action-btn { background: var(--dark-pink); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(244, 143, 177, 0.4); transition: transform 0.2s; margin-top: 20px; }
+        .action-btn:hover { transform: scale(1.05); }
+
+        /* STEP 0: Countdown */
+        #countdown-timer { font-size: 4rem; font-weight: 700; color: #fff; background: rgba(244, 143, 177, 0.8); padding: 20px 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); letter-spacing: 5px; }
+        #boom-message { font-size: 3rem; font-weight: 800; color: #d81b60; text-align: center; text-shadow: 2px 2px 10px rgba(255,255,255,0.9); display: none; animation: zoomIn 0.5s ease-out; }
+        @keyframes zoomIn { from { transform: scale(0); } to { transform: scale(1); } }
+        #start-btn { font-size: 1.2rem; padding: 15px 40px; border-radius: 30px; background: #fff; color: var(--dark-pink); font-weight: bold; border: 3px solid var(--dark-pink); cursor: pointer; transition: 0.3s; margin-bottom: 30px; }
+        #start-btn:hover { background: var(--dark-pink); color: #fff; }
+
+        /* STEP 1: Envelope */
+        .envelope-wrapper { position: relative; width: 300px; height: 200px; background: #ffb6c1; border-radius: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.3s ease; }
+        .envelope-wrapper:hover { transform: scale(1.05) translateY(-5px); }
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 110px solid #ff9db0; transform-origin: top; transition: transform 0.8s ease; z-index: 3; }
+        .envelope-front { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 150px solid #ffc2cd; border-right: 150px solid #ffc2cd; border-bottom: 100px solid #ffaec0; z-index: 2; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+        .envelope-heart { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; color: #ff4d6d; z-index: 4; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.2); } }
+        .envelope.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope.open .envelope-heart { display: none; }
+
+        /* STEP 2: Calendar */
+        .calendar-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        .calendar-card h2 { color: var(--dark-pink); margin-bottom: 20px; font-family: 'Dancing Script', cursive; font-size: 2.5rem; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; font-weight: 500; }
+        .cal-day { padding: 10px 0; color: #666; }
+        .cal-header { color: var(--dark-pink); font-weight: bold; }
+        .cal-highlight { background: var(--dark-pink); color: white; border-radius: 50%; position: relative; animation: pop 1s infinite alternate; }
+        @keyframes pop { from { transform: scale(1); } to { transform: scale(1.1); box-shadow: 0 0 10px rgba(244, 143, 177, 0.8); } }
+
+        /* STEP 3: Letter */
+        .letter-card { background: var(--white-trans); padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+        .letter-text { font-size: 1.1rem; line-height: 1.8; min-height: 200px; }
+        .typing-cursor { display: inline-block; width: 3px; height: 1.2em; background: var(--text-color); vertical-align: bottom; animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* STEP 4: Diary */
+        .diary-container { perspective: 1000px; width: 320px; height: 420px; cursor: pointer; }
+        .diary-book { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; }
+        .diary-cover, .diary-page { position: absolute; width: 100%; height: 100%; border-radius: 10px 20px 20px 10px; display: flex; align-items: center; justify-content: center; flex-direction: column; transform-origin: left center; transition: transform 1s ease; }
+        .diary-cover { background: #ff9db0; color: white; z-index: 5; box-shadow: 5px 5px 15px rgba(0,0,0,0.2); }
+        .diary-page { background: #fff9fa; color: var(--text-color); z-index: 4; padding: 30px; text-align: center; border: 1px solid #ffe4e8; }
+        .diary-container.open .diary-cover { transform: rotateY(-160deg); }
+
+        /* STEP 5: Memories */
+        .gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 900px; }
+        .polaroid { background: white; padding: 15px 15px 40px 15px; border-radius: 5px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); width: 200px; cursor: pointer; transition: transform 0.3s ease; opacity: 0; transform: translateY(30px) rotate(-5deg); }
+        .polaroid:nth-child(even) { transform: translateY(30px) rotate(5deg); }
+        .polaroid.show { opacity: 1; transform: translateY(0) rotate(-3deg); }
+        .polaroid.show:nth-child(even) { opacity: 1; transform: translateY(0) rotate(3deg); }
+        .polaroid:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; }
+        .polaroid img { width: 100%; height: 170px; object-fit: cover; background: #eee; }
+        .polaroid p { margin-top: 10px; text-align: center; font-family: 'Dancing Script', cursive; font-size: 1.2rem; color: #333; }
+        
+        #img-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        #img-modal img { max-width: 90%; max-height: 80%; border: 10px solid white; border-radius: 5px; }
+        #close-modal { color: white; font-size: 40px; cursor: pointer; position: absolute; top: 20px; right: 40px; }
+
+        /* STEP 6: Video */
+        .video-container { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        video { border-radius: 10px; width: 100%; outline: none; }
+
+        /* STEP 7: Cake & Slider */
+        .cake-container { position: relative; width: 250px; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 30px auto; animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .cake-layer { position: absolute; background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .layer-1 { width: 200px; height: 80px; bottom: 0; background: #fff0f3; border: 2px solid #ffccd5; }
+        .layer-2 { width: 150px; height: 60px; bottom: 80px; background: #ffe4e8; border: 2px solid #ffb3c1; }
+        .candle { position: absolute; width: 12px; height: 50px; background: repeating-linear-gradient(45deg, #ff4d6d, #ff4d6d 5px, white 5px, white 10px); bottom: 140px; border-radius: 5px; }
+        .flame { position: absolute; width: 20px; height: 30px; background: #ffb703; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; bottom: 195px; box-shadow: 0 0 15px #ffb703; animation: flicker 0.5s infinite alternate; transition: opacity 0.5s ease; }
+        @keyframes flicker { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(1.1) rotate(-3deg); opacity: 1; } }
+
+/* Slider Tiup Lilin */
+        #blow-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            border-radius: 10px;
+            background: #ffe4e8;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #blow-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--dark-pink);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(244, 143, 177, 0.6);
+            transition: transform 0.2s;
+        }
+        #blow-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* STEP 8: Floating Wishes (REDESIGN) */
+        .wishes-wrapper { border: 2px dashed #f48fb1; border-radius: 20px; padding: 20px; position: relative; width: 100%; max-width: 600px; height: 350px; background: rgba(255, 255, 255, 0.3); overflow: hidden; margin-bottom: 20px; }
+        .bubble {
+            position: absolute;
+            padding: 12px 24px;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #ffe4e8, #ffc2cd);
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(244, 143, 177, 0.4), inset -2px -2px 6px rgba(255,255,255,0.6);
+            color: #d81b60;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            animation: floatBubble 5s ease-in-out infinite alternate;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bubble:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(244, 143, 177, 0.6); }
+        .bubble.popped { animation: popBubble 0.3s forwards !important; pointer-events: none; }
+        
+        @keyframes floatBubble {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(10px) rotate(-3deg); }
+        }
+        @keyframes popBubble {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* Initial bubble positioning to look scattered */
+        #b1 { top: 15%; left: 10%; animation-delay: 0s; }
+        #b2 { top: 10%; right: 15%; animation-delay: 1s; }
+        #b3 { top: 40%; left: 30%; animation-delay: 0.5s; }
+        #b4 { top: 60%; left: 10%; animation-delay: 1.5s; }
+        #b5 { top: 55%; right: 10%; animation-delay: 0.2s; }
+        #b6 { bottom: 15%; left: 40%; animation-delay: 2s; }
+
+        .message-box {
+            background: white;
+            border-left: 6px solid #f48fb1;
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #444;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* STEP 9: Final Surprise */
+        .gift-box { position: relative; width: 200px; height: 180px; cursor: pointer; margin-bottom: 40px; }
+        .box-body { position: absolute; bottom: 0; width: 100%; height: 140px; background: var(--blue); border-radius: 10px; border: 4px solid #90c2e7; }
+        .box-ribbon-v { position: absolute; width: 30px; height: 100%; background: var(--dark-pink); left: 50%; transform: translateX(-50%); }
+        .box-lid { position: absolute; top: 10px; left: -10px; width: 220px; height: 40px; background: var(--blue); border-radius: 5px; border: 4px solid #90c2e7; transition: transform 0.5s ease, opacity 0.5s ease; z-index: 2; }
+        .gift-box.open .box-lid { transform: translateY(-100px) rotate(15deg); opacity: 0; }
+        .final-msg { text-align: center; max-width: 600px; background: rgba(255,255,255,0.85); padding: 30px; border-radius: 20px; opacity: 0; transform: scale(0.8); transition: all 0.8s ease; pointer-events: none; }
+        .final-msg.show { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+        .confetti { position: fixed; width: 10px; height: 10px; z-index: 999; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0;} }
+
+        @media (max-width: 600px) {
+            .step-title h1 { font-size: 2rem; }
+            #countdown-timer { font-size: 3rem; padding: 15px 30px; }
+            #boom-message { font-size: 2rem; }
+            .polaroid { width: 140px; }
+            .polaroid img { height: 120px; }
+            .bubble { padding: 10px 15px; font-size: 0.85rem; }
+            .message-box { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Audio Settings -->
+    <audio id="bg-music" loop>
+        <source src="lagu ulang tahun.mp3" type="audio/mpeg">
+    </audio>
+    <div id="audio-btn" onclick="toggleAudio()">🎵</div>
+
+    <!-- Background Decoration -->
+    <div id="bg-hearts"></div>
+
+    <!-- Progress Indicator -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- STEP 0: Countdown -->
+    <div class="step-section active" id="step0">
+        <button id="start-btn" onclick="startCountdown()">Click to Start Surprise</button>
+        <div id="countdown-timer" style="display:none;">00 : 00 : 05</div>
+        <div id="boom-message">HAPPY 22TH BIRTHDAY SAYAANGGKUUUU 🎉</div>
+    </div>
+
+    <!-- STEP 1: Envelope -->
+    <div class="step-section" id="step1">
+        <div class="step-title">
+            <h1 class="cursive">Hi, Sari Wangii!</h1>
+            <p>Ikhwan punya sesuatu nich buat youuuu...</p>
+        </div>
+        <div class="envelope-wrapper envelope" onclick="handleEnvelope()">
+            <div class="envelope-flap"></div>
+            <div class="envelope-front"></div>
+            <div class="envelope-heart">❤️</div>
+        </div>
+        <br>
+        <p style="color: var(--dark-pink); font-size: 0.9rem; font-style: italic;">A little gift, made with lots of love ♡</p>
+        <button class="action-btn" onclick="handleEnvelope()" style="margin-top: 30px;">Buka Kejutannya</button>
+    </div>
+
+    <!-- STEP 2: Calendar -->
+    <div class="step-section" id="step2">
+        <div class="step-title">
+            <h1 class="cursive">Our Special Day</h1>
+            <p>The day an angel was born ✨</p>
+        </div>
+        <div class="calendar-card">
+            <h2>November 2026</h2>
+            <div class="cal-grid">
+                <div class="cal-day cal-header">Sun</div>
+                <div class="cal-day cal-header">Mon</div>
+                <div class="cal-day cal-header">Tue</div>
+                <div class="cal-day cal-header">Wed</div>
+                <div class="cal-day cal-header">Thu</div>
+                <div class="cal-day cal-header">Fri</div>
+                <div class="cal-day cal-header">Sat</div>
+                <!-- 2026 Nov starts on Sunday -->
+                <div class="cal-day">1</div>
+                <div class="cal-day">2</div>
+                <div class="cal-day">3</div>
+                <div class="cal-day cal-highlight">❤️</div>
+                <div class="cal-day">5</div>
+                <div class="cal-day">6</div>
+                <div class="cal-day">7</div>
+                <div class="cal-day">8</div>
+                <div class="cal-day">9</div>
+                <div class="cal-day">10</div>
+                <div class="cal-day">11</div>
+                <div class="cal-day">12</div>
+                <div class="cal-day">13</div>
+                <div class="cal-day">14</div>
+                <div class="cal-day">15</div>
+                <div class="cal-day">16</div>
+                <div class="cal-day">17</div>
+                <div class="cal-day">18</div>
+                <div class="cal-day">19</div>
+                <div class="cal-day">20</div>
+                <div class="cal-day">21</div>
+                <div class="cal-day">22</div>
+                <div class="cal-day">23</div>
+                <div class="cal-day">24</div>
+                <div class="cal-day">25</div>
+                <div class="cal-day">26</div>
+                <div class="cal-day">27</div>
+                <div class="cal-day">28</div>
+                <div class="cal-day">29</div>
+                <div class="cal-day">30</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3: Birthday Letter -->
+    <div class="step-section" id="step3">
+        <div class="step-title">
+            <h1 class="cursive">Happy 22nd Birthday,<br>Sri Wahyuni!</h1>
+        </div>
+        <div class="letter-card">
+            <div class="letter-text" id="typewriter-text"></div><div class="typing-cursor" id="cursor"></div>
+            <p class="cursive" style="text-align: right; margin-top: 30px; font-size: 1.5rem; color: var(--dark-pink); opacity: 0;" id="signature">With lots of love ♡</p>
+        </div>
+    </div>
+
+    <!-- STEP 4: Secret Diary -->
+    <div class="step-section" id="step4">
+        <div class="step-title">
+            <h1 class="cursive">My Secret Diary</h1>
+            <p>Tap the book to unlock 🔓</p>
+        </div>
+        <div class="diary-container" onclick="openDiary(this)">
+            <div class="diary-cover">
+                <h2 class="cursive" style="font-size: 2.5rem; margin-bottom: 20px;">For Sri</h2>
+                <div class="diary-lock">🔒</div>
+            </div>
+            <div class="diary-page">
+                <h3 class="cursive" style="color: var(--dark-pink); font-size: 1.8rem; margin-bottom: 15px;">To the cutest girl...</h3>
+                <p style="font-size: 0.95rem; line-height: 1.6; color: #555;">
+                    Sejak aku mengenalmu, duniaku jadi jauh lebih berwarna. Kamu selalu punya cara untuk membuat orang di sekitarmu tersenyum. <br><br>
+                    Di usia yang ke-22 ini, aku berdoa semoga semua hal baik datang kepadamu. <br><br>
+                    Jangan pernah merasa sendiri ya, karena aku akan selalu ada buat kamu. Semangat terus sayang! ♡
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5: Our Memories (8 Photos) -->
+    <div class="step-section" id="step5">
+        <div class="step-title">
+            <h1 class="cursive">Sweet Memories</h1>
+            <p>Setiap detik bersamamu adalah kenangan indah ✨</p>
+        </div>
+        <div class="gallery" id="gallery-container">
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto1.jpeg" onerror="this.src='https://placehold.co/400x400/FADADD/4A4A4A?text=Foto+1'" alt="Mem 1"><p>Senyum termanis sa bojong raas ♡</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto2.jpeg" onerror="this.src='https://placehold.co/400x400/B4D9EF/4A4A4A?text=Foto+2'" alt="Mem 2"><p>Si Palingg naon wehhh ✨</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto3.jpeg" onerror="this.src='https://placehold.co/400x400/FADADD/4A4A4A?text=Foto+3'" alt="Mem 3"><p>Cheeseeeee 🐱</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto4.jpeg" onerror="this.src='https://placehold.co/400x400/B4D9EF/4A4A4A?text=Foto+4'" alt="Mem 4"><p>Kesayangan 💖</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto5.jpeg" onerror="this.src='https://placehold.co/400x400/FADADD/4A4A4A?text=Foto+5'" alt="Mem 5"><p>Always together 🌷</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto6.jpeg" onerror="this.src='https://placehold.co/400x400/B4D9EF/4A4A4A?text=Foto+6'" alt="Mem 6"><p>Gemes bingittttt 🥺</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto7.jpeg" onerror="this.src='https://placehold.co/400x400/FADADD/4A4A4A?text=Foto+7'" alt="Mem 7"><p>Serab Cenah ☀️</p></div>
+            <div class="polaroid" onclick="openImage(this)"><img src="images/foto8.jpeg" onerror="this.src='https://placehold.co/400x400/B4D9EF/4A4A4A?text=Foto+8'" alt="Mem 8"><p>IIIIIII Lucuuu ❤️</p></div>
+        </div>
+    </div>
+    <div id="img-modal"><span id="close-modal" onclick="closeImage()">×</span><img id="modal-img" src="" alt="Zoomed"></div>
+
+    <!-- STEP 6: Video -->
+    <div class="step-section" id="step6">
+        <div class="step-title">
+            <h1 class="cursive" style="font-size: 3rem;">A Moment For You</h1>
+            <p>Our beautiful journey captured in motion 🎥</p>
+        </div>
+        <div class="video-container">
+            <video controls>
+                <source src="images/video.mp4" type="video/mp4">
+                Your browser does not support the video tag. Please place video.mp4 in the folder.
+            </video>
+        </div>
+    </div>
+
+<!-- STEP 7: Time for Cake (DIREVISI) -->
+    <div class="step-section" id="step7">
+        <div class="step-title">
+            <h1 class="cursive">Time for Cake!</h1>
+            <p id="cake-msg">Make a Wish, Birthday Girl! 🎂</p>
+        </div>
+        <div class="cake-container">
+            <div class="cake-layer layer-1"></div>
+            <div class="cake-layer layer-2"></div>
+            <div class="candle"></div>
+            <div class="flame" id="flame"></div>
+        </div>
+        
+        <div id="slider-container" style="margin-top: 30px; text-align: center; width: 100%; max-width: 250px;">
+            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666; font-weight: 500;">Geser untuk meniup lilin 🌬️</p>
+            <input type="range" id="blow-slider" min="0" max="100" value="0" oninput="checkSlider()">
+        </div>
+    </div>
+
+    <!-- STEP 8: Floating Wishes (REDESIGN) -->
+    <div class="step-section" id="step8">
+        <div class="step-title" style="margin-bottom: 10px;">
+            <h1 class="cursive" style="font-size: 3rem;">Floating Wishes</h1>
+            <p style="font-size: 1.1rem; color: #666;">Pecahkan gelembung iini untuk mengabulkan harapanmu! ✨</p>
+        </div>
+        
+        <div class="wishes-wrapper">
+            <div class="bubble" id="b1" onclick="popBubble(this, 'Stay Healthy')">Stay Healthy</div>
+            <div class="bubble" id="b2" onclick="popBubble(this, 'Dream Big')">Dream Big</div>
+            <div class="bubble" id="b3" onclick="popBubble(this, 'Always Loved')">Always Loved</div>
+            <div class="bubble" id="b4" onclick="popBubble(this, 'Stay Happy')">Stay Happy</div>
+            <div class="bubble" id="b5" onclick="popBubble(this, 'Be Successful!')">Be Successful!</div>
+            <div class="bubble" id="b6" onclick="popBubble(this, 'Forever Us')">Forever Us</div>
+        </div>
+
+        <div class="message-box" id="wish-msg-box">
+            <span id="wish-msg-text">Ketuk salah satu gelembung di atas... 🎈</span>
+        </div>
+
+        <button class="action-btn" onclick="changeStep(1)" style="margin-top: 10px;">Open Your Gift 🎁</button>
+    </div>
+
+    <!-- STEP 9: Final Surprise -->
+    <div class="step-section" id="step9">
+        <div class="gift-box" onclick="openGift(this)">
+            <div class="box-body"><div class="box-ribbon-v"></div></div>
+            <div class="box-lid"><div class="box-ribbon-v"></div></div>
+        </div>
+        <div class="final-msg" id="final-msg">
+            <h1 class="cursive" style="color: var(--dark-pink); font-size: 2.5rem; margin-bottom: 15px;">Happy Birthday,<br>My Favorite Person!</h1>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">
+                Semoga di usia 22 tahun ini, semua hal baik selalu menemukan jalannya menuju kamu. Teruslah tersenyum, teruslah bermimpi, dan jangan pernah lupa betapa berharganya dirimu.
+            </p>
+            <h3 class="cursive" style="color: var(--dark-pink); font-size: 1.5rem;">Made with Love, Just for Sri Wahyuni ♡</h3>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div id="nav-container">
+        <button class="nav-btn" id="prev-btn" onclick="changeStep(-1)">Back</button>
+        <button class="nav-btn" id="next-btn" onclick="changeStep(1)">Next</button>
+    </div>
+
+    <script>
+        // -- BACKGROUND HEARTS --
+        function createFloatingHearts() {
+            const container = document.getElementById('bg-hearts');
+            const icons = ['❤️', '✨', '🌸', '💖'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+                heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 7000);
+            }, 500);
+        }
+        createFloatingHearts();
+
+        // -- AUDIO CONTROL --
+        const audio = document.getElementById('bg-music');
+        let isPlaying = false;
+        function toggleAudio() {
+            if (isPlaying) { audio.pause(); document.getElementById('audio-btn').innerText = '🎵'; } 
+            else { audio.play().catch(e => console.log("Blocked by browser")); document.getElementById('audio-btn').innerText = '⏸️'; }
+            isPlaying = !isPlaying;
+        }
+
+        // -- NAVIGATION & STEPS --
+        let currentStep = 0; // Starts at 0 (Countdown)
+        const totalSteps = 9;
+        const navContainer = document.getElementById('nav-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        function updateUI() {
+            document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${currentStep}`).classList.add('active');
+
+            if(currentStep > 1 && currentStep < 9) { // Show nav for middle steps
+                progressContainer.style.display = 'block';
+                navContainer.style.display = 'flex';
+                progressBar.style.width = ((currentStep - 1) / (totalSteps - 2)) * 100 + '%';
+            } else {
+                progressContainer.style.display = 'none';
+                navContainer.style.display = 'none';
+            }
+
+            prevBtn.style.display = currentStep > 2 ? 'block' : 'none'; // Lock step 1 envelope
+            
+            // Hide "Next" on step 8 so they use the "Open Your Gift" button instead
+            if (currentStep === 8 || currentStep === 9) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'block';
+            }
+
+            if (currentStep === 3 && !letterTyped) typeLetter();
+            if (currentStep === 5) animatePolaroids();
+        }
+
+        function changeStep(dir) {
+            currentStep += dir;
+            if (currentStep < 1) currentStep = 1; 
+            if (currentStep > totalSteps) currentStep = totalSteps;
+            updateUI();
+        }
+
+// -- STEP 0: COUNTDOWN --
+        function startCountdown() {
+            // Lagu tidak diputar di awal saat tombol diklik
+            document.getElementById('start-btn').style.display = 'none';
+            const timerEl = document.getElementById('countdown-timer');
+            timerEl.style.display = 'block';
+            
+            let count = 5;
+            const interval = setInterval(() => {
+                count--;
+                timerEl.innerText = `00 : 00 : 0${count}`;
+                if (count <= 0) {
+                    clearInterval(interval);
+                    timerEl.style.display = 'none';
+                    document.getElementById('boom-message').style.display = 'block';
+                    triggerConfetti(80);
+                    
+                    // --- LAGU MULAI DIPUTAR OTOMATIS DI SINI ---
+                    if (!isPlaying) toggleAudio();
+                    // -------------------------------------------
+
+                    setTimeout(() => {
+                        currentStep = 1;
+                        updateUI();
+                    }, 3500);
+                }
+            }, 1000);
+        }
+
+        // -- STEP 1: ENVELOPE --
+        function handleEnvelope() {
+            const envelope = document.querySelector('.envelope');
+            envelope.classList.add('open');
+            setTimeout(() => { changeStep(1); }, 1500);
+        }
+
+        // -- STEP 3: LETTER TYPEWRITER --
+const letterContent = `Sari Wangi hbd yang ke-22 yaa🥳. Aku bersyukur banget kamu hadir ke dunia ini dan memilih untuk tumbuh jadi sosok yang luar biasa.\n\nTerima kasih yaa udah bertahan sejauh ini, terima kasih udah selalu jadi tempat ternyaman buat aku. Di usia yang baru ini, aku mau kamu ingat satu hal: kamu gak perlu selalu pura-pura kuat. Kamu berhak bahagia, kamu berhak didengar, karena buat aku, kamu adalah hadiah terbaikkkkkkkk. Semoga di umur 22 ini, semua impian kamu bisa terwujud satu per satu. Tetap jadi Sri Wahyuni yang aku sayangiii yaaw. \n\n.  I love you! 💖`;
+        let i = 0; let letterTyped = false;
+        function typeLetter() {
+            letterTyped = true;
+            const textElement = document.getElementById('typewriter-text');
+            textElement.innerHTML = ''; i = 0;
+            function typing() {
+                if (i < letterContent.length) {
+                    if (letterContent.charAt(i) === '\n') textElement.innerHTML += '<br>';
+                    else textElement.innerHTML += letterContent.charAt(i);
+                    i++; setTimeout(typing, 40);
+                } else {
+                    document.getElementById('cursor').style.display = 'none';
+                    document.getElementById('signature').style.opacity = 1;
+                    document.getElementById('signature').style.transition = 'opacity 1s ease';
+                }
+            }
+            setTimeout(typing, 500);
+        }
+
+        // -- STEP 4: DIARY --
+        function openDiary(el) { el.classList.add('open'); el.querySelector('.diary-lock').innerText = '🔓'; }
+
+        // -- STEP 5: MEMORIES --
+        function animatePolaroids() {
+            const cards = document.querySelectorAll('.polaroid');
+            cards.forEach((card, index) => { setTimeout(() => { card.classList.add('show'); }, index * 200); });
+        }
+        const modal = document.getElementById('img-modal');
+        const modalImg = document.getElementById('modal-img');
+        function openImage(el) { modalImg.src = el.querySelector('img').src; modal.style.display = 'flex'; }
+        function closeImage() { modal.style.display = 'none'; }
+
+// -- STEP 7: CAKE & SLIDER --
+        function checkSlider() {
+            const slider = document.getElementById('blow-slider');
+            if (slider.value >= 90) {
+                slider.disabled = true; 
+                blowCandle();
+            }
+        }
+
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            flame.style.opacity = '0';
+            setTimeout(() => {
+                flame.style.display = 'none';
+                document.getElementById('cake-msg').innerText = "Your wish has been sent to the universe! ✨";
+                document.getElementById('slider-container').style.display = 'none'; 
+                triggerConfetti(50);
+            }, 500);
+        }
+
+        // -- STEP 8: FLOATING WISHES (REDESIGN) --
+        const wishMessages = {
+            'Stay Healthy': 'Semoga sehat selalu, panjang umur, & dijauhkan dari segala hal buruk yaa sayang! ❤️',
+            'Dream Big': 'Semoga semua cita-cita dan impian besarmu bisa terwujud satu per satu! 🌟',
+            'Always Loved': 'Semoga kamu selalu merasa dicintai, dihargai, dan dikelilingi kehangatan! 💕',
+            'Stay Happy': 'Semoga harimu selalu dipenuhi tawa ceria dan senyum manismu yang paling indah! 🥰',
+            'Be Successful!': 'Semoga sukses dan dilancarkan dalam segala urusan, studi, maupun karier ke depannya! 🎓',
+            'Forever Us': 'Semoga kebersamaan kita selalu penuh kehangatan, kompromi, dan saling melengkapi selamanya! 👩 ❤️ 👨'
+        };
+
+        function popBubble(el, key) {
+            if(el.classList.contains('popped')) return;
+            el.classList.add('popped');
+            
+            // Text change with simple fade effect
+            const msgBox = document.getElementById('wish-msg-box');
+            const textEl = document.getElementById('wish-msg-text');
+            msgBox.style.opacity = 0;
+            
+            setTimeout(() => {
+                textEl.innerText = wishMessages[key];
+                msgBox.style.opacity = 1;
+            }, 300);
+
+            // Small local confetti
+            const rect = el.getBoundingClientRect();
+            triggerMiniConfetti(rect.left + rect.width/2, rect.top + rect.height/2);
+        }
+
+        function triggerMiniConfetti(x, y) {
+            const colors = ['#f48fb1', '#ffffff', '#ffb6c1'];
+            for (let i = 0; i < 15; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed';
+                conf.style.left = x + 'px';
+                conf.style.top = y + 'px';
+                conf.style.width = '6px';
+                conf.style.height = '6px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.borderRadius = '50%';
+                conf.style.zIndex = 999;
+                conf.style.pointerEvents = 'none';
+                document.body.appendChild(conf);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 50 + 20;
+                const dx = Math.cos(angle) * velocity;
+                const dy = Math.sin(angle) * velocity;
+
+                conf.animate([
+                    { transform: `translate(0,0) scale(1)`, opacity: 1 },
+                    { transform: `translate(${dx}px, ${dy + 50}px) scale(0)`, opacity: 0 }
+                ], { duration: 600 + Math.random()*400, easing: 'cubic-bezier(.25,.8,.25,1)' });
+
+                setTimeout(() => conf.remove(), 1000);
+            }
+        }
+
+        // -- STEP 9: FINAL SURPRISE --
+        function openGift(el) {
+            if(!el.classList.contains('open')){
+                el.classList.add('open');
+                setTimeout(() => {
+                    document.getElementById('final-msg').classList.add('show');
+                    triggerConfetti(150);
+                }, 500);
+            }
+        }
+
+        // -- MAIN CONFETTI --
+        function triggerConfetti(amount = 50) {
+            const colors = ['#f48fb1', '#B4D9EF', '#ffeb3b', '#a5d6a7', '#ce93d8'];
+            for (let i = 0; i < amount; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = -10 + 'px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = Math.random() * 3 + 2 + 's';
+                conf.style.animationDelay = Math.random() * 1 + 's';
+                if(Math.random() > 0.5) conf.style.borderRadius = '50%';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 5000);
+            }
+        }
+
+    </script>
+</body>
+</html>
